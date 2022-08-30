@@ -1,62 +1,62 @@
+
 <template>
-  <div class="menu">
-    <a>Home</a>
-    <a>Products</a>
-    <a>About</a>
+<div class="menu">
+  <a v-for= "a in 메뉴들" :key="a">{{a}}</a>
+  <button @click="priceSort">가격순정렬</button>
+  <button @click="priceOrt">가격역순정렬</button>
+  <button @click="priceback">되돌리기</button>
   </div>
+<h4>{{price}}퍼 할인중입니다.</h4>
+<Modal @on="모달창열렸니=false" :원룸들="원룸들" :누른거="누른거" :모달창열렸니="모달창열렸니"/>
+<Card @one="모달창열렸니=true; 누른거=$event" :원룸들="원룸들[i]"  v-for ="(a,i) in 원룸들" :key= "a" />
 
-  <div class="black-bg" v-if="모달창열렸니 == true">
-    <div class="white-bg" @click="모달창열렸니 = false">
-      <h4>상세페이지</h4>
-      <p>상세페이지내용임</p>
-    </div>
-  </div>
-<!-- 
-  <div v-for="(product, index) in products" :key="index">
-    <img src="./assets/logo.png" />
-    <h4 @click="모달창열렸니 = true">{{ product }}</h4>
-    <p>
-      {{ prices[index] }} 만원
-      <button @click="increase(index)">신고하기</button>
-      <button @mouseover="increase(index)">마우스 올리면</button>
-      신고수: {{ 신고수[index] }}
-    </p>
-  </div> -->
-  
-  <div v-for="(원룸, index) in 원룸들" :key="index">
-    <img :src="원룸.image" />
-    <h4 @click="모달창열렸니 = true">{{ 원룸.title }}</h4>
-    <p>
-      {{ 원룸.content }} <br />
-      {{ 원룸.price }} 만원 <br />
-      <!-- <button @click="increase(index)">신고하기</button>
-      신고수: {{ 신고수[index] }} -->
-    </p>
-  </div>
 </template>
-
 <script>
-import data from "./assets/data.js";
+import Card from "./Card.vue"
+import Modal from "./Modal.vue"
+import oneroom from './assets/data.js'
 
-export default {
-  data() {
-    return {
-      products: ["역삼동원룸", "천호동원룸", "마포구원룸"],
-      prices: [60, 70, 80],
-      스타일: "color:black",
-      신고수: [0, 0, 0, 0, 0, 0],
-      모달창열렸니: false,
-      원룸들: data,
-    };
-  },
-  methods: {
-    increase(i) {
-      this.신고수[i]++;
+  export default{
+    data(){
+      return{
+        price:20,
+        원룸들오리지널:[...oneroom],
+        누른거:0,
+        원룸들:oneroom,
+        모달창열렸니:false,
+        메뉴들:["Home","Shop","About"],
+        products:['역삼','천호','마구'],
+        신고수:[0,0,0],
+      }
     },
-  },
-};
+    methods:{
+      increase(){
+        this.신고수+=1;
+      },
+      priceSort(){
+        this.원룸들.sort(function(a,b){
+          return a.price-b.price})
+          }, 
+      priceOrt(){
+        this.원룸들.sort(function(a,b){
+          return b.price-a.price})
+        },
+      priceback(){
+        this.원룸들=[...this.원룸들오리지널];
+      },
+      },
+      counted(){
+    setInterval(()=>{
+    this.price--;},1000);
+    },
+    
+    components:{
+      Modal:Modal,
+      Card:Card,
+     
+    }
+  }
 </script>
-
 <style>
 .main {
   text-align: center;
